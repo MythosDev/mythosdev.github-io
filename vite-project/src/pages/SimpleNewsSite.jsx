@@ -7,8 +7,9 @@ const Demo = 'demo_pic.png'
 const Page = () => {
     return (
         <div className="page">
-            <div className="topbar">
-                <h1>The Lighthouse</h1>
+            <div className="flex justify-center flex-col items-center m-0">
+                <img src="/Imperialist Header.png" alt="" className="w-[1000px] object-cover align-middle"/>
+                <h1 className="m-0">The Lighthouse</h1>
             </div>
             <menu>
                 <h2>home</h2>

@@ -12,6 +12,8 @@ import PinterestGrid from "../components/PinterestGrid";
 import Sidebar from '../components/SideBar';
 import BottomBar from '../components/BottomBar';
 import { Link } from 'react-router-dom';
+import SQLDataGetterTest from '../components/SQLDataGetterTest';
+
 
 export default function () {
   const [count, setCount] = useState(0)
@@ -42,6 +44,7 @@ export default function () {
         <InfiniteScrollFeed /> 
         <PinterestGrid />
         */}
+        <SQLDataGetterTest />
         <BottomBar/>
       </div>
     </>

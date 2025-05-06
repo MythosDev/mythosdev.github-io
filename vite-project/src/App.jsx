@@ -28,6 +28,12 @@ import SimpleNewSite from './pages/SimpleNewsSite';
 import PokiToki from './pages/PokiToki/PokiToki';
 import Arcade from './pages/Arcade/Arcade';
 import MovieSite from './pages/MovieSite';
+import CelticPage from './pages/EthnicSites/CelticPage';
+import BlogPostPage from './pages/EthnicSites/BlogPostPage';
+import BrutalistPage from './pages/EthnicSites/BrutalistPage';
+import TeutonicPage from './pages/EthnicSites/TeutonicPage';
+import OdysseyPage from './pages/Odyssey/OdysseyPage';
+import MedievalPage from './pages/MedievalPage';
 
 function App() {
 
@@ -59,6 +65,14 @@ function App() {
           <Route path='/PokiToki' element={<PokiToki />}/>
           <Route path='/Arcade' element={<Arcade/>}/>
           <Route path='/MoviesSecond' element={<MovieSite />}/>
+          <Route path='/Celtic' element={<CelticPage />}/>
+          <Route path='/Germanic' element={<TeutonicPage />}/>
+          <Route path='/Anglo' element={<CelticPage />}/>
+          <Route path='/Brutalist' element={<BrutalistPage />}/>
+          <Route path='/Odyssey' element={<OdysseyPage/>}/>
+          <Route path='/Medieval' element={<MedievalPage/>}/>
+
+          <Route path="/blog/:slug" element={<BlogPostPage />} />
         </Routes>
       </BrowserRouter>
     </>

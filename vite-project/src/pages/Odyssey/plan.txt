@@ -1,0 +1,22 @@
+Tags:
+
+Red:
+3D CHAR
+3D OBJ
+3D REF
+3D BG
+
+Blue:
+VA
+VO
+MOAN
+GROUP
+
+Green:
+NO BG
+STATIC
+H PAN
+MULTI
+COMPLEX
+ONLY BG
+

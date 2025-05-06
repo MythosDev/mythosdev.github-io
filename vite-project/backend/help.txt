@@ -1,0 +1,6 @@
+cd to backend
+node server.js
+
+ctrl c to exit
+node server.js to restart (once exited)
+

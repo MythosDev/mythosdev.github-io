@@ -7,6 +7,7 @@ import SimpleTagSystem from '../components/SimpleTagSystem'
 import ChartComponent from '../components/ChartComponent'
 import Gate from '../components/Gate'
 import '../Global.module.css'
+import StatisticalPage from './StatisticalPage'
 
 
 export default function () {
@@ -100,6 +101,13 @@ export default function () {
                     data={data}
                     onSearch={handleSearch}
                 />
+                <br />
+                <br />
+                <br />
+
+
+
+                <Dropzone />
                 <SimpleTagSystem placeholder='Add a new tag...'/>
             </div>
             <div>
@@ -113,6 +121,7 @@ export default function () {
                 <ChartComponent type="pie" data={gender_crime_data} options={crime_options} />
             </div>
         </div>
+        <StatisticalPage />
         </>
     )
 

@@ -1,11 +1,9 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const DragDropFileInput = ({ onFileDrop }) => {
   const [isDragging, setIsDragging] = useState(false);
-  const [fileName, setFileName] = useState('');
+  const [previewUrl, setPreviewUrl] = useState(null);
 
-  // Handle drag events
   const handleDragEnter = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -30,19 +28,30 @@ const DragDropFileInput = ({ onFileDrop }) => {
 
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const file = e.dataTransfer.files[0];
-      setFileName(file.name);
-      if (onFileDrop) onFileDrop(file); // Pass file back to parent
+      handleFile(file);
     }
   };
 
-  // Handle file input change
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      setFileName(file.name);
-      if (onFileDrop) onFileDrop(file); // Pass file back to parent
+      handleFile(file);
     }
   };
+
+  const handleFile = (file) => {
+    if (file.type.startsWith("image/")) {
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+      if (onFileDrop) onFileDrop(file);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
 
   return (
     <div
@@ -51,21 +60,35 @@ const DragDropFileInput = ({ onFileDrop }) => {
         borderRadius: '8px',
         padding: '20px',
         textAlign: 'center',
-        color: '#007bff',
         backgroundColor: isDragging ? '#f0f8ff' : '#fff',
         transition: 'background-color 0.3s ease',
+        position: 'relative',
+        overflow: 'hidden',
       }}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
       onDragOver={handleDragOver}
       onDrop={handleDrop}
     >
-      <p>{fileName || 'Drag & Drop a file here, or click to upload'}</p>
+      {previewUrl ? (
+        <img
+          src={previewUrl}
+          alt="Preview"
+          style={{
+            width: '100%',
+            height: 'auto',
+            objectFit: 'cover',
+            borderRadius: '8px',
+          }}
+        />
+      ) : (
+        <p style={{ color: '#007bff' }}>Drag & Drop an image here, or click to upload</p>
+      )}
+
       <input
         type="file"
-        style={{
-          display: 'none',
-        }}
+        accept="image/*"
+        style={{ display: 'none' }}
         id="fileInput"
         onChange={handleFileChange}
       />
@@ -81,11 +104,10 @@ const DragDropFileInput = ({ onFileDrop }) => {
           cursor: 'pointer',
         }}
       >
-        Choose a file
+        Choose Image
       </label>
     </div>
   );
 };
 
 export default DragDropFileInput;
-

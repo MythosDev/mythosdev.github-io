@@ -38,7 +38,7 @@ void main() {
 }
 `;
 
-function PixelateImageShader({ imageSrc, radius = 0.2, pixelSize = 0.02 }) {
+function PixelateImageShader({ imageSrc, radius = 0.2, pixelSize = 0.02, className }) {
     const canvasRef = useRef(null);
     const [mouse, setMouse] = useState([0, 0]);
 
@@ -51,87 +51,107 @@ function PixelateImageShader({ imageSrc, radius = 0.2, pixelSize = 0.02 }) {
         img.crossOrigin = 'anonymous';
         img.src = imageSrc;
 
+        let animationFrameId;
+
         img.onload = () => {
-            canvas.width = img.width;
-            canvas.height = img.height;
-            gl.viewport(0, 0, canvas.width, canvas.height);
-            gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+            let program, positionLocation, mouseLocation, radiusLocation, pixelSizeLocation, resLocation;
 
-            const vs = gl.createShader(gl.VERTEX_SHADER);
-            gl.shaderSource(vs, vertexShaderSrc);
-            gl.compileShader(vs);
-            if (!gl.getShaderParameter(vs, gl.COMPILE_STATUS)) {
-                console.error('Vertex shader error:', gl.getShaderInfoLog(vs));
-            }
+            const initGL = () => {
+                // Set canvas internal resolution
+                function resizeCanvas() {
+                    const containerWidth = canvas.parentElement.clientWidth;
+                    const aspect = img.height / img.width;
+                    canvas.style.width = `${containerWidth}px`;
+                    canvas.style.height = `${containerWidth * aspect}px`;
+                    canvas.width = containerWidth;
+                    canvas.height = containerWidth * aspect;
+                    gl.viewport(0, 0, canvas.width, canvas.height);
+                }
+                resizeCanvas();
+                window.addEventListener('resize', resizeCanvas);
 
-            const fs = gl.createShader(gl.FRAGMENT_SHADER);
-            gl.shaderSource(fs, fragmentShaderSrc);
-            gl.compileShader(fs);
-            if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) {
-                console.error('Fragment shader error:', gl.getShaderInfoLog(fs));
-            }
+                gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
-            const program = gl.createProgram();
-            gl.attachShader(program, vs);
-            gl.attachShader(program, fs);
-            gl.linkProgram(program);
-            if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-                console.error('Shader program link error:', gl.getProgramInfoLog(program));
-            }
+                const vs = gl.createShader(gl.VERTEX_SHADER);
+                gl.shaderSource(vs, vertexShaderSrc);
+                gl.compileShader(vs);
+                if (!gl.getShaderParameter(vs, gl.COMPILE_STATUS)) {
+                    console.error('Vertex shader error:', gl.getShaderInfoLog(vs));
+                }
 
-            gl.useProgram(program);
+                const fs = gl.createShader(gl.FRAGMENT_SHADER);
+                gl.shaderSource(fs, fragmentShaderSrc);
+                gl.compileShader(fs);
+                if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) {
+                    console.error('Fragment shader error:', gl.getShaderInfoLog(fs));
+                }
 
-            const positionBuffer = gl.createBuffer();
-            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-                -1, -1, 1, -1, -1, 1,
-                -1, 1, 1, -1, 1, 1
-            ]), gl.STATIC_DRAW);
+                program = gl.createProgram();
+                gl.attachShader(program, vs);
+                gl.attachShader(program, fs);
+                gl.linkProgram(program);
+                if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+                    console.error('Shader program link error:', gl.getProgramInfoLog(program));
+                }
 
-            const positionLocation = gl.getAttribLocation(program, 'a_position');
-            gl.enableVertexAttribArray(positionLocation);
-            gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+                gl.useProgram(program);
 
-            const texture = gl.createTexture();
-            gl.bindTexture(gl.TEXTURE_2D, texture);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+                const positionBuffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+                    -1, -1, 1, -1, -1, 1,
+                    -1, 1, 1, -1, 1, 1
+                ]), gl.STATIC_DRAW);
 
-            const mouseLocation = gl.getUniformLocation(program, 'u_mouse');
-            const radiusLocation = gl.getUniformLocation(program, 'u_radius');
-            const pixelSizeLocation = gl.getUniformLocation(program, 'u_pixelSize');
-            const resLocation = gl.getUniformLocation(program, 'u_resolution');
+                positionLocation = gl.getAttribLocation(program, 'a_position');
+                gl.enableVertexAttribArray(positionLocation);
+                gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
 
-            function render() {
-                gl.clear(gl.COLOR_BUFFER_BIT);
-                gl.uniform2f(mouseLocation, ...mouse);
-                gl.uniform1f(radiusLocation, radius);
-                gl.uniform1f(pixelSizeLocation, pixelSize);
-                gl.uniform2f(resLocation, canvas.width, canvas.height);
-                gl.drawArrays(gl.TRIANGLES, 0, 6);
-            }
+                const texture = gl.createTexture();
+                gl.bindTexture(gl.TEXTURE_2D, texture);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
 
-            render();
+                mouseLocation = gl.getUniformLocation(program, 'u_mouse');
+                radiusLocation = gl.getUniformLocation(program, 'u_radius');
+                pixelSizeLocation = gl.getUniformLocation(program, 'u_pixelSize');
+                resLocation = gl.getUniformLocation(program, 'u_resolution');
 
-            canvas.addEventListener('mousemove', (e) => {
-                const rect = canvas.getBoundingClientRect();
-                setMouse([
-                    e.clientX - rect.left,
-                    canvas.height - (e.clientY - rect.top)
-                ]);
-            });
+                canvas.addEventListener('mousemove', (e) => {
+                    const rect = canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = canvas.height - (e.clientY - rect.top);
+                    setMouse([x, y]);
+                });
 
-            const animationLoop = () => {
-                render();
-                requestAnimationFrame(animationLoop);
+                const render = () => {
+                    gl.clear(gl.COLOR_BUFFER_BIT);
+                    gl.uniform2f(mouseLocation, ...mouse);
+                    gl.uniform1f(radiusLocation, radius);
+                    gl.uniform1f(pixelSizeLocation, pixelSize);
+                    gl.uniform2f(resLocation, canvas.width, canvas.height);
+                    gl.drawArrays(gl.TRIANGLES, 0, 6);
+                };
+
+                const animate = () => {
+                    render();
+                    animationFrameId = requestAnimationFrame(animate);
+                };
+                animate();
             };
-            animationLoop();
+
+            initGL();
+
+            return () => {
+                cancelAnimationFrame(animationFrameId);
+                window.removeEventListener('resize', resizeCanvas);
+            };
         };
     }, [imageSrc, mouse, radius, pixelSize]);
 
-    return <canvas ref={canvasRef} />;
+    return <canvas ref={canvasRef} className={`w-full h-auto block ${className || ''}`} />;
 }
 
 export default PixelateImageShader;

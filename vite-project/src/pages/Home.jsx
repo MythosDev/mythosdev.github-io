@@ -118,13 +118,23 @@ export default function () {
                 ))}
             </div>
 
-            <div className='flex flex-col justify-around w-full'>
-                <div className="transition-transform duration-300 hover:scale-105 h-full">
-                    <PixelateImageShader imageSrc="/demo7.png" radius={0.15} pixelSize={0.01} />
+            <div className='flex flex-col items-center'>
+                <div className="w-full max-w-full  transition-transform duration-300 hover:scale-105">
+                    <PixelateImageShader imageSrc="/demo7.png" radius={0.15} pixelSize={0.01} className="w-full h-auto" />
                 </div>
                 {/* <div className="transition-transform duration-300 hover:scale-105 h-full">
                     <PixelateImageShader imageSrc="/demo2.png" radius={0.15} pixelSize={0.08} />
                 </div> */}
+            </div>
+            <div className="flex flex-col items-center">
+            <div className="w-full transition-transform duration-300 hover:scale-105">
+                <PixelateImageShader
+                imageSrc="/demo7.png"
+                radius={0.15}
+                pixelSize={0.01}
+                className="w-full h-auto"
+                />
+            </div>
             </div>
             {/* <PixelateImageShader imageSrc="/GhibliBanner.webp" radius={0.1} pixelSize={0.04} /> */}
             <SFXButton src='/sfx/bleep.wav' />

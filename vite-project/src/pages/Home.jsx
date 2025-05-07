@@ -113,7 +113,7 @@ export default function () {
             </div>
             {/* <PixelateImageShader imageSrc="/GhibliBanner.webp" radius={0.1} pixelSize={0.04} /> */}
             <SFXButton src='/sfx/bleep.wav' />
-            <SFXButton src='/sfx/music.mp3' />
+            {/* <SFXButton src='/sfx/music.mp3' /> */}
             <HoverSFXButton />
             <HoverSFXButton isFastMode='true'/>
             <HoverSFXButton />

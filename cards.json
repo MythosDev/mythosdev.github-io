@@ -1,0 +1,4 @@
+[
+  { "title": "Poster", "description": "A great poster for your wall.", "image": "image_url", "buttonText": "Buy Now" },
+  { "title": "Jacket", "description": "Stay warm with this stylish jacket.", "image": "image_url", "buttonText": "Buy Now" }
+]

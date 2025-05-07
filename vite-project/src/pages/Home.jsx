@@ -13,7 +13,7 @@ export default function () {
     return(
         <div       
             ref={ref}
-            className="flex flex-col min-h-screen bg-neutral-100 text-neutral-800" 
+            className="flex flex-col min-h-screen bg-neutral-100 text-neutral-800 selection:bg-yellow-300 selection:text-black" 
             // z-10
             style={{ fontFamily: "'Crimson Text', serif" }
         }>
@@ -39,14 +39,14 @@ export default function () {
                         <input id="my-drawer" type="checkbox" className="drawer-toggle" />
                         <div className="drawer-content">
                             {/* Page content here */}
-                            <label htmlFor="my-drawer" className="btn btn-primary drawer-button">Projects</label>
+                            <label htmlFor="my-drawer" className="drawer-button mx-4 font-bold hover:text-blue-500">Projects</label>
+                            {/* btn btn-primary  */}
                         </div>
                         <div className="drawer-side">
                             <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
                             <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-2">
                             {/* Sidebar content here */}
                             <li><Link to="/Portfolio">Portfolio</Link></li>
-                            <li><Link to="/Contacts">Contact</Link></li>
                             <li><Link to="/Contacts">Contact</Link></li>
                             <li><Link to="/Resume">Resume</Link></li>
                             <li><Link to="/Test">Test</Link></li>
@@ -72,7 +72,8 @@ export default function () {
                     </div>
                 </div>
                 <div className="navbar-center">
-                    <a className="btn btn-ghost text-xl">Frontier</a>
+                    <a className=" p-2 text-3xl">Frontier</a>
+                    {/* btn btn-ghost */}
                 </div>
                 <div className="navbar-end">
                     <button className="btn btn-ghost btn-circle">
@@ -88,28 +89,42 @@ export default function () {
             </div>
             <h1 className="text-5xl font-bold">Welcome to my website</h1>
 
-            <div className='flex flex-wrap' ref={ref}>
-                {/* z-10 */}
-                <img className="transition-transform duration-300 hover:scale-105" src="/Ads/ad1.jpg" alt="" />
-                <img className="transition-transform duration-300 hover:scale-105" src="/Ads/ad2.jpg" alt="" />
-                <img className="transition-transform duration-300 hover:scale-105" src="/Ads/ad3.jpg" alt="" />
-                <img className="transition-transform duration-300 hover:scale-105" src="/Ads/ad4.jpg" alt="" />
-                <img className="transition-transform duration-300 hover:scale-105" src="/Ads/ad5.jpg" alt="" />
-                <img className="transition-transform duration-300 hover:scale-105" src="/Ads/ad6.jpg" alt="" />
-                <img className="transition-transform duration-300 hover:scale-105" src="/Ads/ad7.jpg" alt="" />
-                <img className="transition-transform duration-300 hover:scale-105" src="/Ads/ad8.jpg" alt="" />
-                <img className="transition-transform duration-300 hover:scale-105" src="/Ads/ad10.jpg" alt="" />
-                <img className="transition-transform duration-300 hover:scale-105" src="/Ads/ad11.jpg" alt="" />
-                <img className="transition-transform duration-300 hover:scale-105" src="/Ads/ad12.jpg" alt="" />
-                <img className="transition-transform duration-300 hover:scale-105" src="/Ads/ad13.jpg" alt="" />
-                <img className="transition-transform duration-300 hover:scale-105" src="/Ads/ad14.jpg" alt="" />
-                {/* <img className="transition-transform duration-300 hover:scale-105" src="/Ads/ad15.jpg" alt="" /> */}
+            <div className="flex flex-wrap justify-center" ref={ref}>
+                {[
+                    "/Ads/ad1.jpg",
+                    "/Ads/ad2.jpg",
+                    "/Ads/ad3.jpg",
+                    "/Ads/ad4.jpg",
+                    "/Ads/ad5.jpg",
+                    "/Ads/ad6.jpg",
+                    "/Ads/ad7.jpg",
+                    "/Ads/ad8.jpg",
+                    "/Ads/ad10.jpg",
+                    "/Ads/ad11.jpg",
+                    "/Ads/ad12.jpg",
+                    "/Ads/ad13.jpg",
+                    // "/Ads/ad14.jpg",
+                ].map((src, index) => (
+                    <div
+                    key={index}
+                    className="basis-1/3 md:basis-1/6 aspect-[325/475] transition-transform duration-300 hover:scale-105"
+                    >
+                    <img
+                        src={src}
+                        alt=""
+                        className="w-full h-full object-cover"
+                    />
+                    </div>
+                ))}
+            </div>
+
+            <div className='flex flex-col justify-around w-full'>
                 <div className="transition-transform duration-300 hover:scale-105 h-full">
-                    <PixelateImageShader imageSrc="/Ads/ad14.jpg" radius={0.25} pixelSize={0.08} />
+                    <PixelateImageShader imageSrc="/demo7.png" radius={0.15} pixelSize={0.01} />
                 </div>
-                <div className="transition-transform duration-300 hover:scale-105 h-full">
-                    <PixelateImageShader imageSrc="/Ads/ad15.jpg" radius={0.25} pixelSize={0.08} />
-                </div>
+                {/* <div className="transition-transform duration-300 hover:scale-105 h-full">
+                    <PixelateImageShader imageSrc="/demo2.png" radius={0.15} pixelSize={0.08} />
+                </div> */}
             </div>
             {/* <PixelateImageShader imageSrc="/GhibliBanner.webp" radius={0.1} pixelSize={0.04} /> */}
             <SFXButton src='/sfx/bleep.wav' />

@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 
 #Big Files
+#/public/sfx/music.mp3
+sfx/music.mp3
